@@ -27,3 +27,32 @@ for i=1:length(of_folder)
         sample_counter=sample_counter+1;
     end
 end
+
+
+
+target_root = 'results/of2app_unet/images/target/';
+output_root = 'results/of2app_unet/images/output/';
+sample_names= dir([target_root '*.jpg']);
+targets =zeros(170,256,length(sample_names));
+outputs=zeros(170,256,length(sample_names));
+for i=1:length(sample_names)
+    tt = imread([target_root '/' sample_names(i).name]);
+    ot = imread([output_root '/' sample_names(i).name]);
+    targets(:,:,i)= tt(:,:,1);
+    outputs(:,:,i) = ot(:,:,1);
+end
+mean_target = mean(targets,3);
+mean_output=mean(outputs,3);
+
+tt = of(:,:,3);
+mm= tt-130>1;
+ft = repmat(uint8(mean_target),1,1,3)-target;
+fo= repmat(uint8(mean_target),1,1,3)-out;
+image(((ft(:,:,1)-fo(:,:,1)) .* uint8(mm)));
+
+image(((repmat(uint8(mean_target),1,1,3)-target) .* uint8(mm)).^2);
+image(repmat(uint8(mean_target),1,1,3))
+image(target)
+image(abs(target-repmat(uint8(mean_target),1,1,3)))
+image((target(:,:,1)-uint8(mean_target)));
+imshow(targets(:,:,4))
