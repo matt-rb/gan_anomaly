@@ -12,14 +12,14 @@ disp('1- Collecting heatmaps data...');
 %% 1.1- collect CNN appearance heatmaps(distances between cnn feats_target and feats_output)
 disp('Generate Appearance heatmaps...');
 app_heatmap_root = '/home/mahdyar/Documents/MATLAB/gan_anomaly/data/UCSD/ped2/of2app/heatmaps_conv5/';
-of_root = '/home/mahdyar/Documents/MATLAB/gan_anomaly/data/UCSD/ped2/of/';
+of_root = '/home/mahdyar/Documents/MATLAB/gan_anomaly/data/UCSD/ped2/of/test/';
 app_heats = of_masking( app_heatmap_root, of_root );
 save([app_heatmap_root 'all_heats/heatmaps_ofsub.mat'],'app_heats');
 %% 1.2- collect OF heatmaps
 disp('Generate OF heatmaps...');
 target_root = '/home/mahdyar/Documents/MATLAB/gan_anomaly/data/UCSD/ped2/app2of/target_of/';
 output_root = '/home/mahdyar/Documents/MATLAB/gan_anomaly/data/UCSD/ped2/app2of/output_of/';
-of_root = '/home/mahdyar/Documents/MATLAB/gan_anomaly/data/UCSD/ped2/of/';
+of_root = '/home/mahdyar/Documents/MATLAB/gan_anomaly/data/UCSD/ped2/of/test/';
 of_heatmap_root = '/home/mahdyar/Documents/MATLAB/gan_anomaly/data/UCSD/ped2/app2of/heatmaps_magof/';
 % distance methods:
 % 1- diff_of = uotput_of - target_of
@@ -39,6 +39,7 @@ load ('/home/mahdyar/Documents/MATLAB/gan_anomaly/code/variables/ped2.mat');
 disp('2- Splitting frames per videos for OF...');
 of_per_video = split_frames2videos( of_heats, ds_info , options);
 clear 'of_heats';
+
 disp('Splitting frames per videos for App...');
 app_per_video = split_frames2videos( app_heats, ds_info , options);
 clear 'app_heats';
@@ -48,15 +49,22 @@ clear 'app_heats';
 disp('3- Normalize heatmaps per videos...');
 of_seg_all = normalize_data_per_video( of_per_video );
 clear 'of_per_video';
+save_folder = '/home/mahdyar/Documents/MATLAB/gan_anomaly/data/UCSD/ped2/of_heatmaps/';
+save_heatmaps(of_seg_all, save_folder, 'Test');
+%seg_all = load_heatmaps(save_folder, 'Test');
+
 app_seg_all = normalize_data_per_video( app_per_video );
 clear 'app_per_video';
-
+save_folder = '/home/mahdyar/Documents/MATLAB/gan_anomaly/data/UCSD/ped2/app_heatmaps/';
+save_heatmaps(app_seg_all, save_folder, 'Test');
+%seg_all = load_heatmaps(save_folder, 'Test');
 
 %% 4- Feature fusion
 disp('4- Fusing features...');
 seg_all = fuse_features( app_seg_all , of_seg_all );
-%seg_all = normalize_data_per_video( seg_all );
-
+save_folder = '/home/mahdyar/Documents/MATLAB/gan_anomaly/data/UCSD/ped2/fused_heatmaps/';
+save_heatmaps2folder(seg_all, save_folder, 'Test');
+%seg_all = load_heatmaps(save_folder, 'Test');
 
 %% 5- Evaluation 
 disp('5- Evaluation started...');
@@ -69,9 +77,9 @@ load('/home/mahdyar/Documents/MATLAB/gan_anomaly/code/variables/gt_ped2.mat');
 
 options.itrnum = 21;
 options.ClipOfFrame = 0;
-options.threshold_pixellevel = 0.39;
-options.th_roc = 50;
-options.eval_filename ='1_roc_app';
+options.threshold_pixellevel = 0.35;
+options.th_roc = 20;
+options.eval_filename ='2_roc_app'; %1_roc_of, 2_roc_app, 3_roc_fuse2x1
 
 %% 5.2- Evaloation frame level
 options.roc_file_name = ['/home/mahdyar/Documents/MATLAB/gan_anomaly/code/results/ped2/roc/frame/' options.eval_filename '.png'];

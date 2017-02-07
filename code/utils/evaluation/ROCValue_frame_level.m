@@ -23,7 +23,8 @@ for jj=1:options.itrnum
              sumsample = sumsample +1;            
         end
     end
-        
+    
+    
     TPR = TP/positive;
     FPR = FP/negative;
     if (negative==0)
