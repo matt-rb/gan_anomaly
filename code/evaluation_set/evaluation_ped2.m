@@ -77,7 +77,7 @@ load('/home/mahdyar/Documents/MATLAB/gan_anomaly/code/variables/gt_ped2.mat');
 
 options.itrnum = 21;
 options.ClipOfFrame = 0;
-options.threshold_pixellevel = 0.35;
+options.threshold_pixellevel = 0.39;
 options.th_roc = 20;
 options.eval_filename ='2_roc_app'; %1_roc_of, 2_roc_app, 3_roc_fuse2x1
 
